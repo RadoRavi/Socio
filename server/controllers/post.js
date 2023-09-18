@@ -3,6 +3,7 @@ import User from "../models/User.js"
 
 
 export const createPost = async(req,res)=>{
+  const {isDp} = req.query
   
         const {userId,caption,location,picturePath} = req.body
 console.log("picturePath",userId)
@@ -25,8 +26,11 @@ console.log("picturePath",userId)
         const posts = await Post.find();
         console.log(posts.length)
         if(posts.length>0){
+            const updateUserDp = await User.findByIdAndUpdate(userId,{picturePath:picturePath})
+            console.log("updateUserDp",updateUserDp)
+            if(updateUserDp){
             res.status(200).json(posts)
-
+            }
         }
 
         
@@ -84,5 +88,31 @@ export const likePost = async(req,res)=>{
     } catch (error) {
         res.status(400).json({message:error.message})
     }
+    
+}
+
+
+export const deletePost = async(req,res)=>{
+    try {
+        const {userId,postId} = req.params
+const post = await Post.findById(postId)
+console.log(userId)
+console.log(postId)
+console.log(post)
+if(post.userId===userId){
+    console.log("post1")
+    const postDeleted = await Post.findByIdAndDelete(postId)
+    console.log("post2")
+    const allPost = await Post.find()
+    console.log("post3")
+    res.status(200).json(allPost)
+}else{
+    res.status(404).send("post not found")
+}
+    } catch (error) {
+        res.status(404).send(error)
+    }
+    
+
     
 }

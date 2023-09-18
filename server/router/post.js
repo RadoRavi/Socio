@@ -1,5 +1,5 @@
 import express from "express"
-import {getAllPost,getAllPostByUser,likePost} from "../controllers/post.js"
+import {getAllPost,getAllPostByUser,likePost,deletePost} from "../controllers/post.js"
 
 
 const router = express.Router();
@@ -7,6 +7,6 @@ const router = express.Router();
 router.get("/get",getAllPost)
 router.get("/get/:id",getAllPostByUser)
 router.patch("/like/:postId/:userId", likePost)
-//router.patch("/comment/:id/")
+router.delete("/delete/:userId/:postId", deletePost)
 
 export default router
